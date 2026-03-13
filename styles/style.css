@@ -8,7 +8,7 @@ html,body{
 height:100%;
 font-family:Arial, sans-serif;
 background:#000080;
-color:navy;
+color:white;
 overflow-x:hidden;
 }
 
@@ -58,5 +58,3 @@ background:#1e1e28;
 border-color:rgba(255,0,90,0.6);
 box-shadow:0 0 20px rgba(255,0,90,0.6);
 }
-
-
