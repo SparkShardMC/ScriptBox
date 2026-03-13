@@ -1,9 +1,11 @@
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x000814);
 scene.fog=new THREE.FogExp2(0x000814,0.03);
+
 const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,1000);
 camera.position.set(0,3,10);
 camera.lookAt(0,1,0);
+
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(window.innerWidth,window.innerHeight);
 renderer.shadowMap.enabled=true;
@@ -27,12 +29,39 @@ const stars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xffffff,si
 scene.add(stars);
 
 const city=new THREE.Group();
+const neonBoards=[];
+
 for(let i=-10;i<=10;i++){
   const h=Math.random()*5+3;
-  const b=new THREE.Mesh(new THREE.BoxGeometry(1,h,1),new THREE.MeshStandardMaterial({color:0x081f44,emissive:0x00ff99,emissiveIntensity:1.5,metalness:0.5,roughness:0.2}));
-  b.position.set(i*2,h/2,-5);
-  city.add(b);
+  const building=new THREE.Mesh(
+    new THREE.BoxGeometry(1,h,1),
+    new THREE.MeshStandardMaterial({color:0x081f44,emissive:0x00ff99,emissiveIntensity:1.5,metalness:0.5,roughness:0.2})
+  );
+  building.position.set(i*2,h/2,-5);
+  city.add(building);
+
+  const boardCount=Math.floor(Math.random()*3)+1;
+  for(let j=0;j<boardCount;j++){
+    const bw=0.8, bh=0.2;
+    const boardCanvas=document.createElement('canvas');
+    boardCanvas.width=256;
+    boardCanvas.height=64;
+    const bctx=boardCanvas.getContext('2d');
+    bctx.font="20px monospace";
+    const chars="Bookmarklets and Soundeffects!";
+    const text=Array.from({length:10},()=>chars[Math.floor(Math.random()*chars.length)]).join("");
+    bctx.fillStyle=["#00ff99","#ff00ff","#00ffff","#ffff00"][Math.floor(Math.random()*4)];
+    bctx.fillText(text,10,40);
+    const boardTexture=new THREE.CanvasTexture(boardCanvas);
+    const boardMat=new THREE.MeshBasicMaterial({map:boardTexture,emissive:0xffffff});
+    const board=new THREE.Mesh(new THREE.PlaneGeometry(bw,bh),boardMat);
+    board.position.set(0,h/2-(j*0.5+1),0.51);
+    board.userData.texture=boardTexture;
+    building.add(board);
+    neonBoards.push(board);
+  }
 }
+
 scene.add(city);
 
 const hacker=new THREE.Group();
@@ -75,8 +104,7 @@ ctx.fillStyle="#00ff99";
 const texture=new THREE.CanvasTexture(canvas);
 laptopScreen.material.map=texture;
 laptopScreen.material.map.needsUpdate=true;
-
-const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+const chars="ScriptBox, The Home Of Internet Fun";
 let textArray=Array.from({length:50},()=>chars[Math.floor(Math.random()*chars.length)]);
 let index=0;
 
@@ -86,6 +114,12 @@ function updateScreen(){
   ctx.fillText(textArray.slice(index,index+20).join(""),10,50);
   texture.needsUpdate=true;
   index=(index+1)%textArray.length;
+}
+
+function animateBoards(){
+  neonBoards.forEach(board=>{
+    board.userData.texture.needsUpdate=true;
+  });
 }
 
 function animate(){
@@ -100,6 +134,7 @@ function animate(){
   camera.position.x=Math.sin(Date.now()*0.0005)*2;
   camera.lookAt(0,1,0);
   updateScreen();
+  animateBoards();
   renderer.render(scene,camera);
 }
 animate();
