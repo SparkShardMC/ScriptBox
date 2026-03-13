@@ -1,88 +1,80 @@
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000814);
-
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 100);
-camera.position.set(0, 2, 10);
-
-const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(window.innerWidth, window.innerHeight);
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x000814);
+const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,1000);
+camera.position.set(0,3,12);
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
-
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+const ambientLight=new THREE.AmbientLight(0xffffff,0.3);
 scene.add(ambientLight);
-
-const dirLight = new THREE.DirectionalLight(0x00ff99, 1);
-dirLight.position.set(5, 10, 5);
-scene.add(dirLight);
-
-const stars = new THREE.Group();
-for(let i=0;i<500;i++){
-    const geometry = new THREE.SphereGeometry(Math.random()*0.03 + 0.01, 6, 6);
-    const material = new THREE.MeshBasicMaterial({color:0xffffff});
-    const star = new THREE.Mesh(geometry, material);
-    star.position.set(
-        (Math.random()-0.5)*50,
-        (Math.random()-0.2)*20 + 5,
-        (Math.random()-0.5)*50
-    );
-    stars.add(star);
-}
+const pointLight=new THREE.PointLight(0x00ff99,2,50);
+pointLight.position.set(5,10,5);
+pointLight.castShadow=true;
+scene.add(pointLight);
+const neonLight=new THREE.PointLight(0xff00ff,1.5,30);
+neonLight.position.set(-5,5,-5);
+scene.add(neonLight);
+const starGeo=new THREE.BufferGeometry();
+const starCount=1000;
+const positions=[];
+for(let i=0;i<starCount;i++){positions.push((Math.random()-0.5)*100);positions.push(Math.random()*50);positions.push((Math.random()-0.5)*100);}
+starGeo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+const starMat=new THREE.PointsMaterial({color:0xffffff,size:0.1});
+const stars=new THREE.Points(starGeo,starMat);
 scene.add(stars);
-
-const city = new THREE.Group();
-for(let i=-15;i<15;i++){
-    const height = Math.random()*8 + 2;
-    const geometry = new THREE.BoxGeometry(1, height, 1);
-    const material = new THREE.MeshStandardMaterial({color:0x081f44, metalness:0.3, roughness:0.7});
-    const building = new THREE.Mesh(geometry, material);
-    building.position.set(i*2, height/2, -10);
-    city.add(building);
+const city=new THREE.Group();
+for(let i=-20;i<20;i++){
+  const height=Math.random()*8+3;
+  const geom=new THREE.BoxGeometry(1,height,1);
+  const mat=new THREE.MeshStandardMaterial({color:0x081f44,emissive:0x00ff99,emissiveIntensity:Math.random()*0.6+0.4,metalness:0.5,roughness:0.2});
+  const b=new THREE.Mesh(geom,mat);
+  b.position.set(i*2,height/2,-10);
+  city.add(b);
 }
 scene.add(city);
-
-const hackerGeometry = new THREE.BoxGeometry(1,2,0.5);
-const hackerMaterial = new THREE.MeshStandardMaterial({color:0x020617});
-const hacker = new THREE.Mesh(hackerGeometry, hackerMaterial);
-hacker.position.set(0,1,0);
+const hacker=new THREE.Group();
+const bodyMat=new THREE.MeshStandardMaterial({color:0x020617,metalness:0.3,roughness:0.5});
+const bodyGeo=new THREE.CapsuleGeometry(0.5,1.2,4,8);
+const bodyMesh=new THREE.Mesh(bodyGeo,bodyMat);
+bodyMesh.position.set(0,1,0);
+hacker.add(bodyMesh);
+const headGeo=new THREE.SphereGeometry(0.35,16,16);
+const headMat=new THREE.MeshStandardMaterial({color:0x020617});
+const headMesh=new THREE.Mesh(headGeo,headMat);
+headMesh.position.set(0,2.05,0);
+hacker.add(headMesh);
+const eyeGeo=new THREE.BoxGeometry(0.1,0.05,0.05);
+const eyeMat=new THREE.MeshStandardMaterial({color:0x00ff99,emissive:0x00ff99});
+const leftEye=new THREE.Mesh(eyeGeo,eyeMat);
+leftEye.position.set(-0.12,2.05,0.33);
+const rightEye=new THREE.Mesh(eyeGeo,eyeMat);
+rightEye.position.set(0.12,2.05,0.33);
+hacker.add(leftEye);
+hacker.add(rightEye);
+const laptopGeo=new THREE.BoxGeometry(0.8,0.05,0.5);
+const laptopMat=new THREE.MeshStandardMaterial({color:0x051c14,emissive:0x00ff99,emissiveIntensity:0.8});
+const laptopBase=new THREE.Mesh(laptopGeo,laptopMat);
+laptopBase.position.set(0,0.9,-0.5);
+hacker.add(laptopBase);
+const screenGeo=new THREE.PlaneGeometry(0.8,0.5);
+const screenMat=new THREE.MeshBasicMaterial({color:0x00ff99});
+const laptopScreen=new THREE.Mesh(screenGeo,screenMat);
+laptopScreen.position.set(0,1.15,-0.75);
+laptopScreen.rotation.x=-0.3;
+hacker.add(laptopScreen);
 scene.add(hacker);
-
-const computerGeometry = new THREE.BoxGeometry(1.5,1,0.5);
-const computerMaterial = new THREE.MeshStandardMaterial({color:0x051c14, emissive:0x00ff99, emissiveIntensity:0.7});
-const computer = new THREE.Mesh(computerGeometry, computerMaterial);
-computer.position.set(0,0.5,-2);
-scene.add(computer);
-
-const screenGeometry = new THREE.PlaneGeometry(1.4,0.9);
-const screenMaterial = new THREE.MeshBasicMaterial({color:0x00ff99});
-const screen = new THREE.Mesh(screenGeometry, screenMaterial);
-screen.position.set(0,0.5,-1.75);
-scene.add(screen);
-
-let typingText = "> Access Granted...";
-let displayText = "";
-let charIndex = 0;
-setInterval(()=>{
-    displayText += typingText[charIndex];
-    charIndex++;
-    if(charIndex >= typingText.length){
-        displayText = "";
-        charIndex = 0;
-    }
-    screenMaterial.color.set(0x00ff99);
-}, 150);
-
 function animate(){
-    requestAnimationFrame(animate);
-    stars.rotation.y += 0.001;
-    city.rotation.y += 0.001;
-    computer.rotation.y = Math.sin(Date.now()*0.002)*0.05;
-    hacker.rotation.y = Math.sin(Date.now()*0.0015)*0.02;
-    renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+  stars.rotation.y+=0.0005;
+  city.rotation.y+=0.0005;
+  hacker.rotation.y=Math.sin(Date.now()*0.001)*0.05;
+  renderer.render(scene,camera);
 }
 animate();
-
-window.addEventListener('resize', ()=>{
-    camera.aspect = window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
 });
