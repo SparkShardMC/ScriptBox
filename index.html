@@ -13,6 +13,14 @@
     .headerLinks:hover { color:#ff00ff; text-shadow:0 0 10px #ff00ff; }
     h1,h3 { text-shadow:0 0 10px #00ff99; }
 
+    /* Fix to keep Three.js background behind everything */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
     .button-container {
       position: fixed;
       top: 0;
