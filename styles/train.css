@@ -1,0 +1,69 @@
+.train-container {
+    position: relative;
+    width: 200px;
+    height: 100px;
+    margin: 50px auto;
+    /* Optional: ensures crisp edges if upscaling later */
+    image-rendering: pixelated; 
+}
+
+/* Base pixel unit can be adjusted for size */
+:root {
+    --pixel: 5px; 
+    --train-color: #ff0000; /* Red train */
+    --wheel-color: #333333; /* Dark gray wheels */
+}
+
+.cabin {
+    position: absolute;
+    width: calc(8 * var(--pixel)); /* 8x5 pixels */
+    height: calc(5 * var(--pixel));
+    background: var(--train-color);
+    top: calc(2 * var(--pixel));
+    left: calc(8 * var(--pixel));
+    box-shadow: 
+        /* Window */
+        calc(2 * var(--pixel)) calc(-1 * var(--pixel)) 0 0 #ffffff,
+        calc(2 * var(--pixel)) calc(0 * var(--pixel)) 0 0 #ffffff,
+        calc(3 * var(--pixel)) calc(-1 * var(--pixel)) 0 0 #ffffff,
+        calc(3 * var(--pixel)) calc(0 * var(--pixel)) 0 0 #ffffff;
+}
+
+.engine {
+    position: absolute;
+    width: calc(15 * var(--pixel)); /* 15x4 pixels */
+    height: calc(4 * var(--pixel));
+    background: var(--train-color);
+    top: calc(7 * var(--pixel));
+    left: calc(1 * var(--pixel));
+    box-shadow: 
+        /* Smoke stack */
+        calc(2 * var(--pixel)) calc(-1 * var(--pixel)) 0 0 var(--train-color),
+        calc(2 * var(--pixel)) calc(-2 * var(--pixel)) 0 0 var(--train-color),
+        calc(1 * var(--pixel)) calc(-3 * var(--pixel)) 0 0 var(--train-color),
+        calc(2 * var(--pixel)) calc(-3 * var(--pixel)) 0 0 var(--train-color),
+        /* Front buffer */
+        calc(15 * var(--pixel)) calc(0 * var(--pixel)) 0 0 #555555,
+        calc(15 * var(--pixel)) calc(-1 * var(--pixel)) 0 0 #555555;
+}
+
+.wheel {
+    position: absolute;
+    width: calc(3 * var(--pixel)); /* 3x3 pixels */
+    height: calc(3 * var(--pixel));
+    background: var(--wheel-color);
+    top: calc(11 * var(--pixel));
+    border-radius: 50%;
+}
+
+.wheel-left {
+    left: calc(2 * var(--pixel));
+}
+
+.wheel-middle {
+    left: calc(7 * var(--pixel));
+}
+
+.wheel-right {
+    left: calc(12 * var(--pixel));
+}
