@@ -5,7 +5,12 @@
   <meta name="description" content="ScriptBox Dashboard">
   <link rel="stylesheet" href="styles/style.css">
   <title>ScriptBox - Dashboard</title>
-
+<script>
+  if (!localStorage.getItem("sb_token")) {
+    alert("Access Denied. Please sign in.");
+    window.location.href = "auth/sign-up.html";
+  }
+</script>
   <style>
     body { margin:0; overflow:hidden; background:#000814; font-family:Arial,sans-serif; color:white; }
     header, h1 { position:relative; z-index:10; text-align:center; }
