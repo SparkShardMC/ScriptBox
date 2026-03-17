@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .auth_routes import router as auth_router
 from .oauth_google import router as google_oauth_router
+from flask_cors import CORS
 
 app = FastAPI()
 
@@ -15,3 +16,7 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(google_oauth_router)
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
