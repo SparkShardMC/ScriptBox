@@ -5,7 +5,7 @@
   <meta name="description" content="ScriptBox - Sign Up">
   <link rel="stylesheet" href="../styles/style.css">
   <title>ScriptBox - Sign Up</title>
-
+<script src="../scripts/auth.js" defer></script>
   <style>
     body { margin:0; overflow:hidden; background:#000814; font-family:Arial,sans-serif; color:white; }
     header, h1, h3 { position:relative; z-index:10; text-align:center; }
@@ -104,14 +104,15 @@
   <script src="../styles/hacker_scene.js"></script>
   <script src="../scripts/auth.js" defer></script>
   <script>
+    <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.querySelector(".continue-btn, #continue");
-  const input = document.querySelector("input[type='email']");
+  const btn = document.querySelector(".continue-btn, #continue, button");
+  const emailInput = document.querySelector("input[type='email']");
 
-  if (!btn || !input) return;
+  if (!btn || !emailInput) return;
 
   btn.addEventListener("click", () => {
-    const email = input.value.trim();
+    const email = emailInput.value.trim();
     if (!email) return;
 
     localStorage.setItem("email", email);
