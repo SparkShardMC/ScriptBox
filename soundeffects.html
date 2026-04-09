@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sound Effects - ScriptBox</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f0f0; text-align: center; margin: 0; padding: 20px; overflow-y: scroll; }
+        header h1 { font-family: Arial, sans-serif; text-transform: uppercase; margin-bottom: 50px; }
+
+        .container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 50px 20px; max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
+        .sound-item { display: flex; flex-direction: column; align-items: center; }
+        
+        .instant-btn {
+            width: 80px; height: 80px; border-radius: 50%; border: none; cursor: pointer; position: relative;
+            box-shadow: 0 8px #999; transition: all 0.1s; outline: none;
+        }
+
+        .instant-btn:active { box-shadow: 0 2px #666; transform: translateY(4px); }
+
+        .btn-red { background-color: #ff4c4c; }
+        .btn-blue { background-color: #4c8cff; }
+        .btn-yellow { background-color: #ffd14c; }
+        .btn-green { background-color: #4cff61; }
+
+        .sound-label { margin-top: 12px; font-weight: bold; font-size: 13px; color: #333; }
+        .dl-trigger { margin-top: 8px; cursor: pointer; color: #007bff; font-size: 12px; font-weight: bold; text-decoration: none; }
+
+        #downloadModal {
+            display: none; position: fixed; z-index: 9999; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            background-color: #fff; margin: 25vh auto; border-radius: 14px; width: 280px; 
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .modal-body { padding: 20px; border-bottom: 0.5px solid #ccc; }
+        .modal-body p { margin: 0; font-size: 16px; color: #000; line-height: 1.4; }
+        .modal-actions { display: flex; }
+        .modal-actions a, .modal-actions span { flex: 1; padding: 12px; color: #007aff; cursor: pointer; font-size: 17px; text-decoration: none; }
+        .modal-actions span { border-right: 0.5px solid #ccc; }
+        .modal-actions a { font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <header><h1><b>WELCOME TO THE SOUND EFFECTS PAGE</b></h1></header>
+
+    <div class="container">
+        <div class="sound-item">
+            <button class="instant-btn" onclick="playSound('YOUR_FILE.mp3')"></button>
+            <span class="sound-label">Sound 1</span>
+            <div class="dl-trigger" onclick="openDownload('Sound 1', 'YOUR_FILE.mp3')">Download</div>
+        </div>
+    </div>
+
+    <div id="downloadModal">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="modalText">Do you want to download "filename" on "ScriptBox.github.io"?</p>
+            </div>
+            <div class="modal-actions">
+                <span onclick="closeModal()">View</span>
+                <a id="confirmDownload" href="#" download>Download</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Random Color Logic
+        const colors = ['btn-red', 'btn-blue', 'btn-yellow', 'btn-green'];
+        document.querySelectorAll('.instant-btn').forEach(btn => {
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            btn.classList.add(randomColor);
+        });
+
+        // Audio Playback Logic
+        function playSound(url) {
+            new Audio(url).play().catch(() => console.log("Audio file not found."));
+        }
+
+        // Modal Controls
+        function openDownload(name, url) {
+            document.getElementById('modalText').innerText = `Do you want to download "${name}" on "ScriptBox.github.io"?`;
+            document.getElementById('confirmDownload').href = url;
+            document.getElementById('downloadModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('downloadModal').style.display = 'none';
+        }
+
+        // Close modal if user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('downloadModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
