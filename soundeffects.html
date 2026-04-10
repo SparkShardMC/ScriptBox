@@ -4,9 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sound Effects - ScriptBox</title>
-    <link rel="stylesheet" href="styles/style.css
     <style>
-        .container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 50px 20px; max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
+        body { font-family: Arial, sans-serif; background-color: #f0f0f0; text-align: center; margin: 0; padding: 20px; }
+        header h1 { text-transform: uppercase; margin-bottom: 50px; }
+
+        /* Only ONE container holds all the items for the grid to work */
+        .container { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 50px 20px; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding-bottom: 100px; 
+        }
+
         .sound-item { display: flex; flex-direction: column; align-items: center; }
         
         .instant-btn {
@@ -47,29 +58,26 @@
     <header><h1><b>WELCOME TO THE SOUND EFFECTS PAGE</b></h1></header>
 
     <div class="container">
+        
         <div class="sound-item">
             <button class="instant-btn" onclick="playSound('Bass_drop.mp3')"></button>
             <span class="sound-label">Bass Drop</span>
-            <div class="dl-trigger" onclick="openDownload('Sound 1', 'Bass_drop.mp3')">Download</div>
+            <div class="dl-trigger" onclick="openDownload('Bass Drop', 'Bass_drop.mp3')">Download</div>
         </div>
-    </div>
 
-    <div class="container">
         <div class="sound-item">
             <button class="instant-btn" onclick="playSound('Bruh.mp3.mp3')"></button>
             <span class="sound-label">Bruh</span>
             <div class="dl-trigger" onclick="openDownload('Bruh', 'Bruh.mp3.mp3')">Download</div>
         </div>
-    </div>
 
-    <div class="container">
         <div class="sound-item">
             <button class="instant-btn" onclick="playSound('Correct_button.wav')"></button>
             <span class="sound-label">Correct Button</span>
             <div class="dl-trigger" onclick="openDownload('Correct Button', 'Correct_button.wav')">Download</div>
         </div>
-    </div>
 
+        </div> 
     <div id="downloadModal">
         <div class="modal-content">
             <div class="modal-body">
@@ -83,19 +91,17 @@
     </div>
 
     <script>
-        // Random Color Logic
         const colors = ['btn-red', 'btn-blue', 'btn-yellow', 'btn-green'];
         document.querySelectorAll('.instant-btn').forEach(btn => {
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             btn.classList.add(randomColor);
         });
 
-        // Audio Playback Logic
         function playSound(url) {
-            new Audio(url).play().catch(() => console.log("Audio file not found."));
+            const audio = new Audio(url);
+            audio.play().catch(e => console.log("File not found:", url));
         }
 
-        // Modal Controls
         function openDownload(name, url) {
             document.getElementById('modalText').innerText = `Do you want to download "${name}" on "ScriptBox.github.io"?`;
             document.getElementById('confirmDownload').href = url;
@@ -106,7 +112,6 @@
             document.getElementById('downloadModal').style.display = 'none';
         }
 
-        // Close modal if user clicks outside of it
         window.onclick = function(event) {
             if (event.target == document.getElementById('downloadModal')) {
                 closeModal();
