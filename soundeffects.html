@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sound Effects - ScriptBox</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f0f0; text-align: center; margin: 0; padding: 20px; }
-        header h1 { text-transform: uppercase; margin-bottom: 50px; }
+    
+    <link rel="stylesheet" href="styles/style.css">
 
-        /* Only ONE container holds all the items for the grid to work */
+    <style>
+        /* Body and Header styles removed as requested */
+
+        /* This stays here to ensure the 4-column layout works */
         .container { 
             display: grid; 
             grid-template-columns: repeat(4, 1fr); 
@@ -77,7 +79,8 @@
             <div class="dl-trigger" onclick="openDownload('Correct Button', 'Correct_button.wav')">Download</div>
         </div>
 
-        </div> 
+    </div> 
+
     <div id="downloadModal">
         <div class="modal-content">
             <div class="modal-body">
